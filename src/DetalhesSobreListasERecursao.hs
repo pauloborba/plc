@@ -2,6 +2,9 @@ module DetalhesSobreListasERecursao where
 
 import IntroducaoAProgramacaoFuncionalEHaskell
 
+
+-- notação alternativa
+
 procIndice l i = case l of
                     [] -> []
                     (e:l) -> if (i == 0) then [e]
@@ -57,7 +60,7 @@ banco4 = remover "45-6" banco3
 tamanhoBanco = tamanho banco4
 
 
--- Exercício: definir ++, ver tipo de ++
+-- Exercício: definir ++
 -- definir reverse
 -- não precisa (rev l) ++ [e], nem e:(conc l m), aplicação de função puxa pela esquerda…
 
@@ -67,6 +70,3 @@ rev (e:l) = rev l ++ [e]
 conc [] l = l
 conc (e:l) m = e:conc l m
 
--- Indo bem devagar, com tempo para eles pensarem e fazerem cada uma
--- das funções acima antes de eu explicar a minha solução…
--- Por isso a terceira aula foi até aqui.
