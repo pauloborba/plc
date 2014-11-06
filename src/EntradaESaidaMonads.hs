@@ -154,6 +154,7 @@ t4 = do c <- getChar
         return (c == 'y') 
 
 -- Nos exemplos abaixo, pChar e gChar são os gC e pC do começo da aula.
+
 {- 
 do c <- getChar
    putChar c
