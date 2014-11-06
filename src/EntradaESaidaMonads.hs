@@ -19,7 +19,7 @@ import Data.Char
 
 gC (e,s) = (head e, (tail e,s))
 
--- pC :: a -> (t, [a]) -> (t, [a])
+-- pC :: a -> (t, [a]) -> (t, [a]) 
 
 pC c (e,s) = (e, s ++ [c])
 
@@ -72,17 +72,15 @@ mmmm = getChar >>= (\c1 ->
        putChar (somac c1 c2)))
 
 
+-- IO é um monad, por isso pode usar a notação acima, já que todo monad
+-- tem o operador >>=
+--
 -- class Monad m where 
 --    return :: a -> m a 
 --    >>= :: m a -> (a -> m b) -> m b
 --
-
--- data IOO a = IOC ((String,String) -> (a,(String,String)))
--- instance Monad (IOO) where
---	return v = IOC (\io -> (v,io))
---	(IOC f) >>= g = IOC (\i -> let (v,i1) = f i
---                                    (IOC h) = g v
---                                  in (h i1))
+-- No caso específico de IO, esse operador faz toda a transição de estado de
+-- entrada e saída, como veremos depois.
 
 -- Vantagem de se encaixar na classe Monad é que pode usar notação do do;
 -- mostrar ela e a alternativa...
@@ -115,7 +113,8 @@ t3d = do c <- getChar
 
 
 -- Monads, um tipo especial de classe, que possibilita uso de sintaxe 
--- especial em Haskell
+-- especial em Haskell, como vemos abaixo em notação alternativa à do
+-- prelude.
 
 class Monadd m where 
     init :: a -> m a 
@@ -123,32 +122,38 @@ class Monadd m where
     -- return e >>=
     -- (>>) :: m a -> m b -> m b
     -- a >> f = a >>= \_ -> f
-    -- fail
+    -- fail    
 
 -- Monad é construtor de tipo (tipo parametrizado) que representa computação que 
--- retorna um valor desse tipo. A computação pode ser trivial, assim monad pode conter
--- apenas informação sobre o tipo... 
---
--- Construtor de tipo acompanhdo de função que mapeia elemento em monad do elemento
--- (elemento em computação que retorna o elemento), função que mapeia funções em elementos
--- para funções em monads dos elementos, e função que mapeia monad de monad de elemento
--- em monad de elemento. Ou a primeira função mais uma como bind, que usa elemento retornado
+-- retorna um valor do tipo recebido como parâmetro. A computação pode ser trivial, 
+-- assim monad pode conter apenas informação sobre o tipo. Melhor, um tipo parametrizado
+-- é uma instância de Monad se tem função que mapeia elemento do tipo recebido como parâmetro
+-- em monad do elemento (elemento em computação que retorna o elemento), e função que mapeia 
+-- funções em elementos para funções em monads dos elementos, e função que mapeia monad de monad 
+-- de elemento em monad de elemento. Ou a primeira função mais uma como bind, que usa elemento retornado
 -- por uma computação para gerar outra computação (compõe computações, usando info gerada pela
 -- primeira e carregando estado da primeira para a segunda computação - estado resultante
--- da primeira é entrada para a segunda)...
-
--- Monad é um functor
-
+-- da primeira é entrada para a segunda). Monad é um functor
+--
 -- Listas, com map, join e unit formam um monad... Daí notação usada
 -- para compreensão de listas
-
+--
 -- Restrições nas funções: (unit a) <== k = k a     m <== unit = m
 
+-- No caso específico de IO, o tipo parametrizado e as funções são as seguintes.
+--
+-- data IOO a = IOC ((String,String) -> (a,(String,String)))
+-- instance Monad (IOO) where
+--	return v = IOC (\io -> (v,io))
+--	(IOC f) >>= g = IOC (\i -> let (v,i1) = f i
+--                                    (IOC h) = g v
+--                                  in (h i1))
 
 t4 = do c <- getChar
         putChar c
         return (c == 'y') 
 
+-- Nos exemplos abaixo, pChar e gChar são os gC e pC do começo da aula.
 {- 
 do c <- getChar
    putChar c
