@@ -4,6 +4,7 @@ module Main where
 import IntroducaoAProgramacaoFuncionalEHaskell
 import DetalhesSobreListasERecursao
 import FuncoesDeAltaOrdemAplicacaoParcialMap
+import InterpretacaoEAnaliseEstaticaDelinguagens
 
 -- | The main entry point.
 main :: IO ()
@@ -23,4 +24,4 @@ main = do
     putStrLn ("Intersection 2:" ++ show (intersection [3,4,2] [1,22,33,5]))
     putStrLn ("Difference 2:" ++ show (diff [3,4,2] [1,2,3,4,5]))
     putStrLn ("Média:" ++ show teste1)
-    
+    putStrLn ("Funinterpreter >" ++ (show (intPrograma ambientesimples prog1)))    
