@@ -5,6 +5,7 @@ import IntroducaoAProgramacaoFuncionalEHaskell
 import DetalhesSobreListasERecursao
 import FuncoesDeAltaOrdemAplicacaoParcialMap
 import InterpretacaoEAnaliseEstaticaDelinguagens
+import ExameEscrito2014
 
 -- | The main entry point.
 main :: IO ()
@@ -25,3 +26,4 @@ main = do
     putStrLn ("Difference 2:" ++ show (diff [3,4,2] [1,2,3,4,5]))
     putStrLn ("Média:" ++ show teste1)
     putStrLn ("Funinterpreter >" ++ (show (intPrograma ambientesimples prog1)))    
+    putStrLn ("Int Prova >" ++ (show (resv)) ++ " \n>>> " ++ (show ress))    
