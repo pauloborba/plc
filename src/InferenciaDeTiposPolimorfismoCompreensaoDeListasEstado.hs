@@ -15,6 +15,7 @@ zipp _ _ = []
 -- Comparar com um zipp sem os underlines
 -- Exercitar mecanismo de inferência de tipos com reverse e ++, e depois com o procurar.
 
+
 -- Exercícios
 
 removeDups [] = []

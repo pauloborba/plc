@@ -94,6 +94,7 @@ name (n,a,p) = n
 type Saldo = Double
 type Conta = (String,Saldo)
 
+
 creditarConta (n,s) v = (n,s + v)
 debitarConta (n,s) v = (n,s - v)
 
