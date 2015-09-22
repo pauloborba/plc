@@ -146,6 +146,6 @@ data TTTree t = NilTTT | NNNode t [(TTTree t)]
 -- tipo a que satisfaz algumas propriedades, que contém algumas funções
 -- específicas. A função não serve apenas para um tipo específico (função
 -- não polimórfica). Nem é completamente genérica, servindo para qualquer 
--- tipo (polimorfismo paramétrico). É um meio termo, a função serve para 
+-- tipo (polimorfismo paramétrico ). É um meio termo, a função serve para 
 -- um subconjunto dos tipos da linguagem, uma classe de tipos, o parâmetro 
 -- tem que satisfazer algumas condições (bounded parametric polymorphism).

@@ -14,6 +14,7 @@ zipp _ _ = []
 
 -- Comparar com um zipp sem os underlines
 -- Exercitar mecanismo de inferência de tipos com reverse e ++, e depois com o procurar.
+--
 -- a ideia é tentar inferir o tipo da funcao. o ambiente haskell começa com a primeira equacao: conc [] l = l. 
 -- por ai, ele ja descobre que essa função tem dois parâmetros. ele inicialmente registra que o tipo deve ser algo 
 -- como conc :: x -> y -> z. indo adiante, olhando para o primeiro parâmetro, ele chega a conclusão que tem que ser 
@@ -69,7 +70,7 @@ split p (x:xs) = if (x >= p) then (l,x:r) else (x:l,r)
 			where (l,r) = split p xs
 
 eqsort [] = []
-eqsort (x:xs) =  eqsort l ++ [x] ++ eqsort r
+eqsort (x:xs) =  eqsort l ++ [x] ++eqsort r
 			where (l,r) = split x xs 
 
 
