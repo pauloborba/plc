@@ -40,6 +40,7 @@ sizefrp = foldr soma1 0
 
 sizefrpl = foldr (\x y -> 1 + y) 0
 
+
 mediafold [] = []
 mediafold l = s/t 
      where (s,t) = foldr (\x (s1,t1) -> (s+s1,t1+1)) (0,0) l
