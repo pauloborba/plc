@@ -40,6 +40,9 @@ sizefrp = foldr soma1 0
 
 sizefrpl = foldr (\x y -> 1 + y) 0
 
+ 
+-- Podemos definir a função que computa a media com foldr, também sem
+-- varrer a lista duas vezes.
 
 mediafold [] = []
 mediafold l = s/t 
