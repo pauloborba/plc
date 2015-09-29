@@ -64,6 +64,7 @@ mmm = do c1 <- getChar
 -- putStr :: String -> IO ()
 -- putStrLn :: String -> IO ()
 
+
 -- Usando uma notação especial que, na verdade, é uma abreviação
 -- para o código abaixo, usando os operadores da class Monad!
 
@@ -153,8 +154,9 @@ t4 = do c <- getChar
         putChar c
         return (c == 'y') 
 
--- Nos exemplos abaixo, pChar e gChar são os gC e pC do começo da aula.
-
+-- Nos exemplos abaixo, pChar e gChar seriam similares aos gC e pC do começo da aula.
+-- A única diferença é que pChar retornaria ((),(i,o++[c])), ao invés de simplesmente (i,o++[c])
+-- getChar = (IOC gChar), e putChar c = seria (IOC (pChar c))
 {- 
 do c <- getChar
    putChar c
