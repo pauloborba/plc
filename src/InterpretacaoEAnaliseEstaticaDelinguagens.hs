@@ -1,7 +1,7 @@
 module InterpretacaoEAnaliseEstaticaDelinguagens where
 
 -- Para interpretar programas, precisamos representá-los de forma
--- abstrata, como uma árvore resultante d processo de parsing. Para
+-- abstrata, como uma árvore resultante do processo de parsing. Para
 -- representar os programas de uma linguagem funcional simples, 
 -- temos o seguinte.
 
@@ -43,7 +43,7 @@ instance Show ValorFun where
 -- A função que implementa o interpretador dos termos precisa receber como parâmetro um
 -- ambiente, contendo as funções pré-definidas, e as definidas pelo programador.
 
-type Ambiente = [(Id,Valor)]
+type Ambiente = [(Id,ValorFun)]
 
 -- No nosso caso, o ambiente teria apenas a definição de "+".
 
@@ -123,7 +123,7 @@ sq3 = (Seq (Atr "y" (Som (Atr "z" (Lit 5)) (Var "z"))) termo3)
 -- linguagem manipula apenas números e funções. Como as funções
 -- podem acessar e modificar variáveis que mudam de valor ao longo 
 -- da execução, é necessário receber não só o argumento da função,
--- e retornar ser resultado. É preciso receber também o estado atual,
+-- e retornar seu resultado. É preciso receber também o estado atual,
 -- e retornar o novo estado modificado pela execução da função.
 
 data Valor = Num Double
