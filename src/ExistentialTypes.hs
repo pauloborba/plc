@@ -124,7 +124,31 @@ instance Show Valor where
    show (Fun f) = "Função"
 
 
-data TaintTransformer a = TT ([String] -> (a,[String]))
+
+-- Ao invés de interpretar as expressões e obter o resultado final das suas execuções, 
+-- podemos também só analisar o programa para verificar propriedades mais simples, como
+-- para onde flui informações sigilosas. Assim, não precisamos armazenar os valores das
+-- variáveis, mas apenas a informação de se ela contém informação sigilosa ou não.
+-- Temos também considerar o caso de falha, e da variável armazenar uma função. É 
+-- necessário armazenar a função para depois saber se informação é vazada na aplicação 
+-- dessa função.
+
+data Result = B Bool | F ((Result,FlowState) -> (Result,FlowState)) | Falha
+
+type FlowState = [(String,Result)]
+
+instance Eq Result where
+    (B x) == (B y) =  x == y
+    Falha == Falha = True
+    _ == _ = False
+
+instance Show Result where
+    show (B x) = show x
+    show Falha = "Falha"
+    show (F _) = "Função"
+    
+
+data TaintTransformer a = TT (FlowState -> (a,FlowState))
 
 instance Monad (TaintTransformer) where
    return r = TT (\e -> (r,e))
@@ -133,47 +157,62 @@ instance Monad (TaintTransformer) where
                             in (n e1)
                      )    
 
-ana:: Termo -> TaintTransformer Bool
 
-ana (Var i) = TT (\tainted -> (isIn i tainted,tainted))
+-- adicionar if e while na linguagem
 
-ana (Lit n) = return (False)
+ana:: Termo -> TaintTransformer Result
+
+ana (Var i) = TT (\tainted -> (get i tainted,tainted))
+
+ana (Lit n) = return (B False)
 
 ana (Som t u) = do t1 <- ana t
                    u1 <- ana u
-                   return (t1 || u1)
+                   return (orr t1 u1)
 
-ana (Lam i t) = ana t
+ana (Atr i t) = do v <- ana t
+                   add i v 
+                   return v
+
+ana (Lam i t) = return (let (TT f) = ana t
+                        in (F (\(v,tainted) -> removePair i (f (wr (i,v) tainted)))))                   
 
 ana (Apl f t) = do f1 <- ana f
                    t1 <- ana t
-                   return (t1 || f1)
-
-ana (Atr i t) = do v <- ana t
-                   verify i v 
-                   return v
+                   appp f1 t1
 		     
 ana (Seq t u) = do ana t
                    ana u
 
-verify i True = TT (\t -> (True,add i t))
-verify i False = TT (\t -> (False,remove i t))
+appp (F f) r = TT (\tainted -> f (r,tainted)) 
+appp _ _ = return Falha
 
-add i l  | isIn i l = l
-         | otherwise = i:l
+orr (B x) (B y) = (B (x || y))
+orr _ _ = Falha
 
-remove i l = [e | e <- l , i /= e]   
+add i v = TT (\t -> (v,wr (i,v) t))
 
-isIn i [] = False
-isIn i (x:xs) = (i==x) || isIn i xs
+removePair i (r,l) = (r,remove i l)
+
+remove i l = [e | e <- l , i /= (fst e)]   
+
+get i [] = Falha
+get i ((j,v):l) = if i == j then v else get i l  
 
 p1 = Atr "x" (Var "x")
 p2 = Atr "y" (Var "x")
 p3 = Atr "z" (Var "y")
 p4 = Atr "w" (Lit (3::Double))
 p5 = Atr "y" (Var "w")
-p6 = Seq p1 (Seq p2 (Seq p3 (Seq p4 p5)))
+p6 = Atr "a" (Lam "i" (Atr "y" (Var "i")))
+p7 = Atr "b" (Apl (Var "a") (Var "x"))
+p8 = Var "b"
+p9 = Seq p1 (Seq p2 (Seq p3 (Seq p4 (Seq p5 (Seq p6 (Seq p7 p8))))))
+
+-- assumindo caso onde, inicialmente, apenas "x" contém informação sigilosa.
+-- resultado mostra que variáveis podem conter informação sigilosa no final
+-- da execução, e se o resultado final gerado pelo programa vaza informação
+-- sigilosa
 
 analisador p = let (TT f) = ana p 
-               in f ["x"]
-      
+               in f [("x",(B True))]

@@ -93,6 +93,48 @@ sq3 = (Seq (Atr "y" (Som (Atr "z" (Lit 5)) (Var "z"))) termo3)
 at t = let (ST m) = (int [] t)
        in m []
 
+{-
+at termo1 = let (ST m) = (int [] termo1)
+            in m []
+
+            
+int [] termo1 = do f1 <- int [] (Lam "x" (Som (Var "x") (Lit 2)))
+                   t1 <- int [] (Lit 3)
+                   app f1 t1
+              = do f1 <- ST (\e -> (Fun (\v -> int (("x",v):[]) (Som (Var "x") (Lit 2))),e))    
+                   t1 <- ST (\e -> (Num 3,e))
+                   app f1 t1
+              =     ST (\e -> (Fun (\v -> int (("x",v):[]) (Som (Var "x") (Lit 2))),e)) 
+                >>= (\f1 -> ST (\e1 -> (Num 3,e1)) >>= (\t1 -> app f1 t1) )
+              = ST (\e2 -> let (v,e3) = (\e -> (Fun (\v -> int (("x",v):[]) (Som (Var "x") (Lit 2))),e))  e2
+                                (ST n) = (\f1 -> ST (\e1 -> (Num 3,e1)) >>= (\t1 -> app f1 t1) ) v
+                            in (n e3)
+                    )  
+              = ST (\e2 -> let (v,e3) = (Fun (\v -> int (("x",v):[]) (Som (Var "x") (Lit 2))),e2)  
+                                (ST n) = (\f1 -> ST (\e1 -> (Num 3,e1)) >>= (\t1 -> app f1 t1) ) v
+                            in (n e3)
+                    ) 
+              = ST (\e2 -> let (v,e3) = (Fun (\v -> int (("x",v):[]) (Som (Var "x") (Lit 2))),e2)  
+                                (ST n) = ST (\e1 -> (Num 3,e1)) >>= (\t1 -> app v t1)
+                            in (n e3)
+                    )          
+              = ST (\e2 -> ((\e1 -> (Num 3,e1)) >>= (\t1 -> app v t1)) e2) 
+
+              
+(ST m) >>= f = ST (\e2 -> let (v,e3) = m e2
+                                (ST n) = f v
+                            in (n e3)
+                     ) 
+
+int [] (Lit 3) = return (Num 3)
+               = ST (\e -> (Num 3,e))
+
+int [] (Lam "x" (Som (Var "x") (Lit 2))) = 
+     return (Fun (\v -> int (("x",v):[]) (Som (Var "x") (Lit 2)))) =
+     ST (\e -> (Fun (\v -> int (("x",v):[]) (Som (Var "x") (Lit 2))),e))    
+
+-}
+
 instance Show Valor where
    show (Num x) = show x
    show Erro = "Erro"
