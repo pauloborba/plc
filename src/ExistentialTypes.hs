@@ -1,5 +1,5 @@
 {-# LANGUAGE ExistentialQuantification #-}
-module ExistentialTypes where 
+module ExistentialTypes where
 
 -- Na linguagem anterior, só elementos de Double podiam ser usados como literais. 
 -- Uma opção seria criar um construtor para cada tipo de literal, o que geraria uma
