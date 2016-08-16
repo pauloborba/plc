@@ -195,7 +195,7 @@ eliminarDuplicatas [] = []
 eliminarDuplicatas (x:xs) | member x xs = eliminarDuplicatas xs
                           | otherwise = x:(eliminarDuplicatas xs)
 
-unionduplicata a b = union (eliminarDuplicatsa a) (eliminarDuplicatas b)
+unionduplicata a b = union (eliminarDuplicatas a) (eliminarDuplicatas b)
 
 
 -- simetria               
