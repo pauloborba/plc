@@ -1,0 +1,52 @@
+Introdução a programação funcional e Haskell
+IntroducaoAProgramacaoFuncionalEHaskell.hs
+
+Detalhes sobre listas e recursão
+DetalhesSobreListasERecursao.hs
+
+Inferência de tipos, polimorfismo paramétrico, compreensão de listas, simulando estado com parâmetros e recursão
+InferenciaDeTiposPolimorfismoCompreensaoDeListasEstado.hs
+
+Qualidade de código, refatoração, abstração, generalização, funções de alta ordem, aplicação parcial, map
+FuncoesDeAltaOrdemAplicacaoParcialMap.hs
+
+Mais sobre funções de alta ordem, filter, fold
+FuncoesDeAltaOrdemFilterFold.hs
+
+Expressões lambda, composição de funções, escopo, avaliação preguiçosa 
+ExpressoesLambdaComposicaoLazyness.hs
+
+Tipos abstratos, polimorfismo paramétrico limitado, interpretadores simples
+TiposAbstratosPolimorfismoParametricoLimitado.hs
+
+Mais sobre polimorfismo paramétrico limitado, classes de tipo
+MaisPolimorfismoParametricoLimitadoClassesDeTipo.hs
+
+Entrada e saída, monads
+EntradaESaidaMonads.hs
+
+Interpretação e análise estática de linguagens de programação
+InterpretacaoEAnaliseEstaticaDelinguagens.hs
+
+Interpretação e análise estática com monads
+InterpretacaoEAnaliseEstaticaComMonads.hs
+
+Perguntas e respostas
+ExistentialTypes.hs
+
+Primeiro exame escrito
+
+Definição do projeto
+
+
+
+
+
+
+
+
+
+
+
+
+

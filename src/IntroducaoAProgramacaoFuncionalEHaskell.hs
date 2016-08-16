@@ -41,6 +41,7 @@ max a b = if (a > b) then a else b
 
 xor a b = (a || b) && not(a && b)
 
+axor :: Bool -> Bool -> Bool
 axor True a = not a
 axor False a = a
 
@@ -80,6 +81,7 @@ addPair (x,y) = x+y
 
 shift ((x,y),z) = (x,(y,z))
 
+shiftt ((x,_),_) = (x,(x,x))
 
 -- Nomeando tipos
 
@@ -168,6 +170,32 @@ outromember e l = (count e l) > 0
 union [] c =  c
 union (x:xs) c | member x c = union xs c
                | otherwise = x:(union xs c)
+
+-- exemplo de reescrita
+-- union (1:[]) [] =
+--    { x=1 xs=[] c=[] } 
+--    1:(union [] [])
+--    1:[]
+
+
+-- declaração redundante, mas mais eficiente quando o segundo argumento é []
+
+union1 [] [] = []
+union1 [] l = l
+union1 l [] = l
+union1 (x:xs) c | member x c = union xs c
+                | otherwise = x:(union xs c)
+
+
+-- union [1] [5,4,3,2,1,1] = [5,4,3,2,1,1]
+-- union assume que listas recebidas não têm elementos repetidos;
+-- pode haver duplicatas entre as listas, no entanto.
+
+eliminarDuplicatas [] = []
+eliminarDuplicatas (x:xs) | member x xs = eliminarDuplicatas xs
+                          | otherwise = x:(eliminarDuplicatas xs)
+
+unionduplicata a b = union (eliminarDuplicatsa a) (eliminarDuplicatas b)
 
 
 -- simetria               
