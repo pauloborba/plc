@@ -183,8 +183,8 @@ union (x:xs) c | member x c = union xs c
 union1 [] [] = []
 union1 [] l = l
 union1 l [] = l
-union1 (x:xs) c | member x c = union xs c
-                | otherwise = x:(union xs c)
+union1 (x:xs) c | member x c = union1 xs c
+                | otherwise = x:(union1 xs c)
 
 
 -- union [1] [5,4,3,2,1,1] = [5,4,3,2,1,1]
