@@ -191,6 +191,18 @@ union1 (x:xs) c | member x c = union1 xs c
 -- union assume que listas recebidas não têm elementos repetidos;
 -- pode haver duplicatas entre as listas, no entanto.
 
+-- Exercícios
+
+removeDups [] = []
+removeDups (e:l) = if member e l then removeDups l else e:removeDups l
+
+-- unique Elimina apenas elementos repetidos em sequência
+
+unique [] = []
+unique [e] = [e]
+unique (x:y:ys) | x == y = unique (y:ys)
+		| x /= y = x:unique (y:ys)
+
 eliminarDuplicatas [] = []
 eliminarDuplicatas (x:xs) | member x xs = eliminarDuplicatas xs
                           | otherwise = x:(eliminarDuplicatas xs)

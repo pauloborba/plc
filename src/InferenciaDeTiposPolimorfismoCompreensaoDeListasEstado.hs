@@ -30,16 +30,6 @@ zipp _ _ = []
 -- que é justamente o tipo exigido pelo ":" à direita do =. Assim, ele termina e chega a conclusão que a função é
 -- bem tipada. 
 
--- Exercícios
-
-removeDups [] = []
-removeDups (e:l) = if member e l then removeDups l else e:removeDups l
-
-unique [] = []
-unique [e] = [e]
-unique (x:y:ys) | x == y = unique (y:ys)
-		    | x /= y = x:unique (y:ys)
-
 
 -- Ao invés de recursão, podemos usar compreensão de listas.
 
@@ -58,19 +48,21 @@ creditarcc n v l = [ (n1,s) | (n1,s) <- l, n1 /= n ] ++ [ creditarConta (n1,s) v
 -- equivalência comportamental, semântica: duas funções são equivalentes quando, para todas
 -- as possíveis entradas, elas retornam o mesmo resultado. contrastar com igualdade sintática.
 
+
 qsort [] = []
 qsort (e:l) =    qsort [x | x <- l, x < e ]
               ++ [e]
               ++ qsort [x | x <- l, x >= e ]
 
 -- qsort mais eficiente com split
+-- split como exercício
 
 split p [] = ([],[])
 split p (x:xs) = if (x >= p) then (l,x:r) else (x:l,r)
 			where (l,r) = split p xs
 
 eqsort [] = []
-eqsort (x:xs) =  eqsort l ++ [x] ++eqsort r
+eqsort (x:xs) =  eqsort l ++ [x] ++ eqsort r
 			where (l,r) = split x xs 
 
 

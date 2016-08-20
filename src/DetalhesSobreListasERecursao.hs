@@ -1,7 +1,7 @@
 module DetalhesSobreListasERecursao where
 
 import IntroducaoAProgramacaoFuncionalEHaskell
-
+ 
 
 -- notação alternativa
 
@@ -18,11 +18,6 @@ i2 = procurarIndice [12,3,4,5,9] 6
 i3 = procIndice [12,3,4,5,9] 3
 i4 = procIndice [12,3,4,5,9] 6
 
--- procurarP n [] = []
--- procurarP n ((n,s):cs) = [(n,s)]
--- variável não pode ser repetida no padrão...
--- procurarP n ((n1,s):cs) = procurarP n cs
-
 
 -- Mais funções sobre listas, agora com contas
 
@@ -31,6 +26,12 @@ cadastrarBugado c l = l ++ [c]
 procurar n [] = []
 procurar n1 ((n2,s):l) | n1 == n2 = [(n2,s)]
                        | n1 /= n2 = procurar n1 l
+
+-- procurarP n [] = []
+-- procurarP n ((n,s):cs) = [(n,s)]
+-- variável não pode ser repetida no padrão...
+-- procurarP n ((n1,s):cs) = procurarP n cs
+
 
 remover n [] = []
 remover n1 ((n2,s):l) | n1 == n2 = l
