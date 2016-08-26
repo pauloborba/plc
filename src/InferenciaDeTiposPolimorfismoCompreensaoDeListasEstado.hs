@@ -30,6 +30,12 @@ zipp _ _ = []
 -- que é justamente o tipo exigido pelo ":" à direita do =. Assim, ele termina e chega a conclusão que a função é
 -- bem tipada. 
 
+-- Passos da inferência do tipo de rev
+-- rev :: x -> y
+-- rev :: [z] -> y
+-- rev :: [z] -> [w]
+-- rev :: [z] -> [w]     {e :: z, l :: [z]}
+-- rev :: [z] -> [z] 
 
 -- Ao invés de recursão, podemos usar compreensão de listas.
 
@@ -39,9 +45,14 @@ removerc n l = [(n1,s) | (n1,s) <- l, n1 /= n ]
 
 procurarc n l = [(n1,s) | (n1,s) <- l, n == n1 ]
 
-creditarc n v l = [ if (n == n1) then creditarConta (n1,s) v else (n1,s) | (n1,s) <- l]
+-- creditarc n v [] = []
+-- creditarc n v ((n,s):l) =
 
-creditarcc n v l = [ (n1,s) | (n1,s) <- l, n1 /= n ] ++ [ creditarConta (n1,s) v | (n1,s) <- l, n1 == n ]
+creditarc n v l = [ if (n == n1) then creditarConta (n1,s) v 
+                    else (n1,s) | (n1,s) <- l]
+
+creditarcc n v l = [ (n1,s) | (n1,s) <- l, n1 /= n ] 
+                ++ [ creditarConta (n1,s) v | (n1,s) <- l, n1 == n ]
 
 -- de qualquer forma, esses dois creditar não são equivalentes ao primeiro quando 
 -- a lista tem mais de um par com o mesmo número
@@ -57,13 +68,56 @@ qsort (e:l) =    qsort [x | x <- l, x < e ]
 -- qsort mais eficiente com split
 -- split como exercício
 
+-- split com o mesmo problema de performance do primeiro quicksort
+
+splitt p l = ([x | x <- l, x < p], [x | x <- l, x >= p])
+
+esquerda (l1,l2) = l1
+direita (l1,l2) = l2
+
+spliti p [] = ([],[])
+spliti p (x:xs) | x < p = ( x:esquerda (spliti p xs) , direita (spliti p xs) )
+               | otherwise =  ( esquerda (spliti p xs) , x:direita (spliti p xs) )
+
+-- split mais elegante
+
 split p [] = ([],[])
 split p (x:xs) = if (x >= p) then (l,x:r) else (x:l,r)
 			where (l,r) = split p xs
 
+-- Exercício: reescreva
+--
+-- split 3 [1,4,3,2] = 
+--   split 3 1:(4:(3:(2:[]))) = 
+--       (1:2:[],4:3:[])              { p = 3, x = 1, xs = 4:(3:(2:[])) }
+--
+--
+-- split 3 (4:(3:(2:[]))) =
+--       (2:[],4:3:[])            { p = 3, x = 4, xs = 3:(2:[]) }
+-- 
+-- 
+-- split 3 (3:(2:[])) =
+--       (2:[],3:[])          { p = 3, x = 3, xs = 2:[] }
+
+-- split  3 (2:[]) = 
+--         (2:[],[])        { p = 3, x = 2, xs = [] }
+
+-- split 3 [] = ([],[])
+
+-- split 3 [1,4,3,2] = (1:2:[],4:3:[])
+-- split 3 [4,3,2] = (2:[],4:3:[])
+-- split 3 [3,2] = (2:[],3:[])
+-- split 3 [2] = (2:[],[]) 
+-- split 3 [] = ([],[])
+
+-- Forma equivalente mas menos sucinta do where acima:
+--                       s = split p xs
+--                       l = esquerda s
+--                       r = direita s
+
 eqsort [] = []
-eqsort (x:xs) =  eqsort l ++ [x] ++ eqsort r
-			where (l,r) = split x xs 
+eqsort (x:xs) = eqsort l ++ [x] ++ eqsort r
+		where (l,r) = split x xs 
 
 
 -- como simular estado com o banco...
@@ -73,6 +127,8 @@ eqsort (x:xs) =  eqsort l ++ [x] ++ eqsort r
 
 first (e:es) = e
 second (e:es) = first es
+
+segundo (x:y:xs) = y
 
 sistema entrada = sist entrada []
 sist [] estado = estado

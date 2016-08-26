@@ -6,6 +6,12 @@ import FuncoesDeAltaOrdemAplicacaoParcialMap
 -- Relembrar a definição de map, e exemplos de funções definidas em termos de map.
 -- Calcular tipos das funções. Estudar os vários exemplos e exercícios nos slides.
 
+-- *
+-- maprr :: x -> y -> z  
+-- maprr :: x -> [w] -> [v] 
+-- maprr :: x -> [w] -> [v]        { e :: w/a , l :: [w]/[a] } 
+-- maprr :: (a -> b) -> [a] -> [b] 
+
 -- Map com compreensão de conjuntos. Fica mais claro que todos os elementos da lista
 -- vão ser transformados pela função f, e que a lista resultante tem o mesmo tamanho
 -- da original.
@@ -15,7 +21,7 @@ mapc f l = [f e | e <- l]
 
 -- Agora vamos selecionar só os aprovados… Precisamos fazer algo em todos
 -- os elementos, mas nem todos são mantidos na lista resultante… Então map 
--- serve para essa situação!
+-- não serve para essa situação!
 
 aprovadosr [] = []
 aprovadosr ((nome,nota) : l) | nota >= 7 = (nome,nota) : aprovadosr l
@@ -25,6 +31,18 @@ aprovadosr ((nome,nota) : l) | nota >= 7 = (nome,nota) : aprovadosr l
 -- Ou, de forma mais concisa, com compreensão de listas…
 
 aprovados l = [ (nome,nota) | (nome,nota) <- l , nota >= 7 ] 
+
+
+-- formas mais complicados e funções similares com semânticas diferentes
+
+aprovadoss [] = []
+aprovadoss ((n,m):xs) = [ (n1,m1) | (n1,m1) <- (n,m):xs, m1 >=7 ] 
+
+aprovadosespecial l = [ (n,m+1) | (n,m) <- l , m >= 7 ]
+
+aprovadosaquino1 l (n1,m1) = [ (n,m) | (n,m) <- l , m >= 7 ] ++ [(n1,m1)]
+
+aprovadosaquino2 l (n1,m1) = [ (n,m) | (n,m) <- (n1,m1):l , m >= 7 ] 
 
 
 -- Reprovados poderiam ser obtidos usando a operação de diferença entre listas,
@@ -49,6 +67,13 @@ alunosr p ((nome,nota) : l) | p nota =  (nome,nota) : alunosr p l
 alunos p l = [(nome,nota) | (nome,nota) <- l , p nota]
 
 
+-- alunos :: x -> y -> z
+-- alunos :: x -> y -> [w]
+-- alunos :: x -> y -> [(a,b)]
+-- alunos :: x -> [(a,b)] -> [(a,b)]
+-- alunos :: (b -> Bool) -> [(a,b)] -> [(a,b)]
+
+
 -- Podemos então definir as duas funções sem duplicar a lógica de filtragem. Essa
 -- lógica poderia ser reusada para implementar várias funções similares, e poderia ser
 -- ajustada ou otimizada uma única vez, t
@@ -56,9 +81,16 @@ alunos p l = [(nome,nota) | (nome,nota) <- l , p nota]
 aprovadosa l = alunos maior7 l
 maior7 nota = nota >= 7
 
+
+-- aprovadosa [("Milton",5),("Emanoel",7)] =
+-- alunos maior7 [("Milton",5),("Emanoel",7)] =
+-- alunos maior7 [("Emanoel",7)] =
+-- ("Emanoel",7):alunos maior7 [] =
+-- ("Emanoel",7):[]
+
+
 reprovadosa l = alunos menor7 l
 menor7 nota = nota < 7
-
 
 -- alunos :: (t1 -> Bool) -> [(t, t1)] -> [(t, t1)]
 -- Podemos generalizar ainda mais, não só filtrando baseado na nota, mas
@@ -68,7 +100,7 @@ mfilter p l = [x | x <-l , (p x)]
 
 mfilterr p [] = []
 mfilterr p (e : l) | p e = e : mfilterr p l
-		        | otherwise = mfilterr p l
+		   | otherwise = mfilterr p l
 
 reprovadosf l = filter menorpar7 l
 menorpar7 (nome,nota) = nota < 7
@@ -107,6 +139,22 @@ teste5 = mediaTurma teste4
 
 fold op []  = 0
 fold op (e : l) = op e (fold op l)
+
+
+-- *
+-- fold (+) [1,3] =
+--      (+) 1 (fold (+) [3]) 
+--      (+) 1 ((+) 3 (fold (+) [])) 
+--      (+) 1 ((+) 3 (0)) 
+
+-- fold soma1 [1,3] = 
+--      soma1 1 (fold soma1 [3])
+--      soma1 1 (fold soma1 [3])
+--      1 + (fold soma1 [3])
+--      1 + (soma1 3 (fold soma1 []))
+--      1 + (1 + (fold soma1 []))
+--      1 + (1 + (0))
+
 
 somaf l = fold (+) l 
 sizef l = fold soma1 l
