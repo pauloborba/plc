@@ -1,7 +1,6 @@
-module InferenciaDeTiposPolimorfismoCompreensaoDeListasEstado where
+module Aula where
 
-import IntroducaoAProgramacaoFuncionalEHaskell
-import FuncoesDeAltaOrdemAplicacaoParcialMap
+import  ExpressoesLambdaComposicaoLazyness
 
 -- listas de tópicos a explorar na aula
 -- essencialmente cópia do arquivo da aula, sem o código a ser
@@ -10,9 +9,6 @@ import FuncoesDeAltaOrdemAplicacaoParcialMap
 -- discutidas ou explicadas, não desenvolvidas do zero
 
 -- na aula passada...
-
-
-
 
 
 -- copiar para o arquivo da aula as novas definições criadas sob demanda dos alunos
