@@ -4,6 +4,8 @@ import FuncoesDeAltaOrdemAplicacaoParcialMap
 import TiposAbstratosPolimorfismoParametricoLimitado
 
 
+-- verificar o tipo de mediaaux :: Fractional a => a -> a -> [a] -> a
+
 -- Para termos o polimorfismo paramétrico limitado, temos que definir as restrições, 
 -- ou as classes de tipos. Bem parecido com interfaces em Java.
 --
