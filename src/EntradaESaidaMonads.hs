@@ -1,6 +1,8 @@
 module EntradaESaidaMonads where
 
 import Data.Char
+import Control.Applicative (Applicative(..))
+import Control.Monad       (liftM, ap)
 
 -- Monad é uma classe especial bastante usada em toda a linguagem, para
 -- entrada e saída, coompreensão de listas, etc.
@@ -155,13 +157,20 @@ class Monadd m where
 
 data IOO a = IOC ((String,String) -> (a,(String,String)))
 
-instance Monad (IOO) where
-	return v = IOC (\io -> (v,io))
+instance Functor (IOO) where
+    fmap = liftM
 
-	(IOC f) >>= g = IOC (\i -> let { (v,i1) = f i ;
+instance Applicative (IOO) where
+    pure v = IOC (\io -> (v,io))
+    (<*>) = ap
+
+instance Monad (IOO) where
+    (IOC f) >>= g = IOC (\i -> let { (v,i1) = f i ;
                                    (IOC h) = g v
                                 }
                               in (h i1))
+
+
 
 {- getChar >>= (\c -> putChar c) =
 
