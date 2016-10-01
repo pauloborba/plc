@@ -1,5 +1,8 @@
 module InterpretacaoEAnaliseEstaticaComMonads where
 
+import Control.Applicative (Applicative(..))
+import Control.Monad       (liftM, ap)
+
 -- Usando monads para representar a noção de estado no interpretador da aula
 -- anterior.
 
@@ -29,8 +32,14 @@ data Valor = Num Double
 
 data StateTransformer a = ST (Estado -> (a,Estado))
 
+instance Functor (StateTransformer) where
+    fmap = liftM
+
+instance Applicative (StateTransformer) where
+    pure r = ST (\e -> (r,e))
+    (<*>) = ap
+
 instance Monad (StateTransformer) where
-   return r = ST (\e -> (r,e))
    (ST m) >>= f = ST (\e -> let (v,e1) = m e
                                 (ST n) = f v
                             in (n e1)
@@ -62,7 +71,7 @@ int a (Atr i t) = do v <- int a t
                      assign (i,v)
                      -- ST (\e -> (v,wr (i,v) e))
 
-		 {- = ST (\e -> let (ST f) = int a t
+{- = ST (\e -> let (ST f) = int a t
                                 (v,ei) = f e
                             in (v,wr (i,v) ei))
                   -}
@@ -159,6 +168,13 @@ instance Show Valor where
 
 data Maybee a = Nothingg | Justt a
 
+instance Functor (Maybee) where
+    fmap = liftM
+
+instance Applicative (Maybee) where
+    pure x      =  Justt x
+    (<*>) = ap
+
 instance Monad Maybee where
     Justt x >>= k  =  k x
     Nothingg >>= _ =  Nothingg
@@ -229,6 +245,13 @@ testm n b = do x <- procurar n b
 
 data  Eitherr a b  =  Leftt a | Rightt b
   deriving (Eq, Ord, Read, Show)
+
+instance Functor (Eitherr e) where
+      fmap = liftM
+
+instance Applicative (Eitherr e) where
+      pure = Rightt
+      (<*>) = ap
 
 instance Monad (Eitherr e) where
     return = Rightt
